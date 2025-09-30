@@ -1,0 +1,11 @@
+.DS_Store
+cache/
+logs/
+media/
+images/uploads/
+pub/
+zc_install/
+includes/configure.php
+zadmin_wx/includes/configure.php
+vendor/
+composer.lock
