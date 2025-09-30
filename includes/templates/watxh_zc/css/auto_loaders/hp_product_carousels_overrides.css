@@ -1,0 +1,36 @@
+#nmx-tabs-nav {
+    border-bottom-color: #e2e3df;
+    border-bottom-width: 1px;
+}
+
+    .nmx-tab.active {
+        background: #2e3233;
+        color: #fff;
+    }
+
+    .nmx-owl-carousel-products .owl-prev,
+    .nmx-owl-carousel-products .owl-next {
+        border-color: #e2e3df;
+    }
+
+@media only screen and (max-width: 767px) {
+
+  .nmx-tab {
+    font-size: 14px;
+    padding: 10px 10px;
+  }
+  
+}
+
+@media only screen and (max-width: 500px) and (min-width: 320px) {
+
+  .nmx-tab {
+    font-size: 12px;
+    display: table-cell;
+    float: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+}

@@ -1,0 +1,5 @@
+<?php
+	$template_query = $db->Execute("SELECT template_configuration_group_id FROM " . TABLE_TEMPLATE_CONFIG_GROUP . " WHERE template_configuration_group_title='watxh_zc'");
+	$template_options_group_id = $template_query->fields['template_configuration_group_id'];
+
+	$db->Execute("INSERT INTO " . TABLE_TEMPLATE_CONFIG . " (template_configuration_title, template_configuration_tab, template_configuration_tab_section, template_configuration_key, template_configuration_value, template_configuration_description, template_configuration_group_id, sort_order, set_function) VALUES ('Show Subcategory in Product Listing', 'Home', 'Listing', 'SHOW_ALL_PRODUCTS_INSTEAD_OF_SUB_CATEGORIES', 'true', 'Show Sub-category instead of all products in the category', ".$template_options_group_id.", '0', 'truefalse')");
