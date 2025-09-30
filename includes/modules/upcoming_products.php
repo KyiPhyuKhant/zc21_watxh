@@ -11,7 +11,9 @@
 if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
-
+if (!isset($manufacturers_id)) {
+  $manufacturers_id = isset($_GET['manufacturers_id']) ? (int)$_GET['manufacturers_id'] : 0;
+}
 // initialize vars
 $categories_products_id_list = [];
 $list_of_products = '';

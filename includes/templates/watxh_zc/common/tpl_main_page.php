@@ -265,7 +265,7 @@ $body_id = ($this_is_home_page) ? 'indexHome' : str_replace('_', '', $_GET['main
        </div>
       </div>
       <?php endif; ?>
-
+      
       <?php } ?>
       <!-- eof breadcrumb -->
       <!-- <div class="clearBoth"></div> -->

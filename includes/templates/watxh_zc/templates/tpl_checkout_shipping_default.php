@@ -15,8 +15,8 @@
 ?>
 <div class="centerColumn checkout_pages container" id="checkoutShipping">
  <div class="checkoutShipping_breadcrumb">
-    <a href="/watxh_zc">Home /</a>
-    <a href="/watxh_zc/cart">Checkout /</a>
+    <a href="/zencart-210-watxh">Home /</a>
+    <a href="/zencart-210-watxh/index.php?main_page=shopping_cart">Cart /</a>
     <span>Shipping</span>
  </div>
  <?php echo zen_draw_form('checkout_address', zen_href_link(FILENAME_CHECKOUT_SHIPPING, '', 'SSL')) . zen_draw_hidden_field('action', 'process'); ?>

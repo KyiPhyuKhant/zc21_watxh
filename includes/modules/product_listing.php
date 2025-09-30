@@ -20,6 +20,7 @@ $show_bottom_submit_button = false;
 $error_categories = false;
 
 $show_submit = zen_run_normal();
+// var_dump("testing listings");
 
 $columns_per_row = defined('PRODUCT_LISTING_COLUMNS_PER_ROW') ? (int)PRODUCT_LISTING_COLUMNS_PER_ROW : 1;
 if (empty($product_listing_layout_style) || !in_array($product_listing_layout_style, ['columns', 'table', 'fluid'])) {
@@ -210,7 +211,24 @@ if ($num_products_count > 0) {
         if (!empty($_GET['cPath'])) $linkCpath = $_GET['cPath'];
         if (!empty($_GET['manufacturers_id']) && !empty($_GET['filter_id'])) $linkCpath = $_GET['filter_id'];
 
-        for ($col = 0, $n = count($column_list); $col < $n; $col++) {
+        if (!isset($column_list) || $column_list === null || empty($column_list)) {
+            // numeric index list of which columns to show
+            $column_list = array(
+                'PRODUCT_LIST_MODEL',
+                'PRODUCT_LIST_NAME',
+                'PRODUCT_LIST_MANUFACTURER',
+                'PRODUCT_LIST_PRICE',
+                'PRODUCT_LIST_QUANTITY',
+                'PRODUCT_LIST_WEIGHT',
+                'PRODUCT_LIST_IMAGE',
+            );
+        }
+        for ($col=0, $n=count($column_list); $col<$n; $col++) {
+            // Add safety check for array key existence
+            if (!isset($column_list[$col])) {
+                continue;
+            }
+            
             $lc_align = '';
             $lc_text = '';
 

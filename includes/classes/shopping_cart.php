@@ -1940,6 +1940,7 @@ class shoppingCart extends base
                 }
             }
 
+            
             if (!is_numeric($_POST['cart_quantity']) || $_POST['cart_quantity'] <= 0) {
                 // adjust quantity when not a value
                 // If use an extra_cart_actions file to prevent processing by this function,
@@ -2160,7 +2161,11 @@ class shoppingCart extends base
         }
 
         $exclude[] = 'action';
-        zen_redirect(zen_href_link($goto, zen_get_all_get_params($exclude)));
+        if($goto == 'index') {
+            zen_redirect(zen_href_link($goto));
+        } else {
+            zen_redirect(zen_href_link($goto, zen_get_all_get_params($exclude)));
+        }
     }
 
     /**
