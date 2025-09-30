@@ -1,4 +1,8 @@
 <?php
+trigger_error("Test log from watxh project", E_USER_NOTICE);
+?>
+
+<?php
 /**
  * Common Template - tpl_main_page.php
  *
