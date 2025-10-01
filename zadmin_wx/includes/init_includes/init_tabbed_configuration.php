@@ -2,7 +2,7 @@
 global $sniffer;
 if (!$sniffer->field_exists(TABLE_CONFIGURATION, 'configuration_tab'))  $db->Execute("ALTER TABLE " . TABLE_CONFIGURATION . " ADD configuration_tab varchar(32) NOT NULL DEFAULT 'both';");
 
-$zc150 = (PROJECT_VERSION_MAJOR > 1 || (PROJECT_VERSION_MAJOR == 1 && substr(PROJECT_VERSION_MINOR, 0, 3) >= 5));
+$zc150 = ((defined('PROJECT_VERSION_MAJOR') && PROJECT_VERSION_MAJOR > 1) || ((defined('PROJECT_VERSION_MAJOR') && PROJECT_VERSION_MAJOR == 1) && substr(PROJECT_VERSION_MINOR, 0, 3) >= 5));
 if ($zc150 && function_exists('zen_page_key_exists') && function_exists('zen_register_admin_page')) // continue Zen Cart 1.5.0
 {
   if (!zen_page_key_exists('configDefault')) {
