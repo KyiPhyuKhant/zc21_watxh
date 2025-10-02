@@ -35,7 +35,7 @@ $totalReviews = (int)$countR->fields['total_reviews'];
     
     <?php if ($messageStack->size('product_info') > 0) echo $messageStack->output('product_info'); ?>
     <?php
-    // if ($nmx_disk_cache->cacheStart('tpl_product_info_display', '', true, true)) {
+    if ($nmx_disk_cache->cacheStart('tpl_product_info_display', '', true, true)) {
     ?>
     
   <?php //} ?>

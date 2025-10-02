@@ -1,5 +1,5 @@
 <?php
-// if ($nmx_disk_cache->cacheStart('tpl_index_default', array($_SESSION['languages_id']), true, true)) {
+if ($nmx_disk_cache->cacheStart('tpl_index_default', array($_SESSION['languages_id']), true, true)) {
 ?>
 <?php
       /**
@@ -732,6 +732,6 @@ echo $recentlyViewedContent;
 
 <!-- </div> -->
 <?php
-//       $nmx_disk_cache->cacheEnd();
-// }
+      $nmx_disk_cache->cacheEnd();
+}
 ?>

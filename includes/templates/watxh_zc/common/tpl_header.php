@@ -38,7 +38,7 @@ if (isset($_GET['info_message']) && zen_not_null($_GET['info_message'])) {
 if (!isset($flag_disable_header) || !$flag_disable_header) {
 ?>
 <?php
-  // if ($nmx_disk_cache->cacheStart('tpl_header', array($_SESSION['customer_id'], $_SESSION['customer_first_name'], $_SESSION['cart']->count_contents()), array($_SESSION['languages_id']), true, true)) {
+  if ($nmx_disk_cache->cacheStart('tpl_header', array($_SESSION['customer_id'] ?? null, $_SESSION['customer_first_name'] ?? '', $_SESSION['cart']->count_contents()), array($_SESSION['languages_id']), true, true)) {
   ?>
 <div id="header" role="banner">
 
@@ -104,12 +104,12 @@ if (!isset($flag_disable_header) || !$flag_disable_header) {
     </ul>
     <!--  -->
     <form class="navbar-top--left">
-     <select name="" id="">
+     <select name="" id="language-selector">
       <option value="">English</option>
       <option value="">Spanish</option>
       <option value="">French</option>
      </select>
-     <select name="" id="">
+     <select name="" id="currency-selector">
       <option value="">USD</option>
       <option value="">GBP</option>
       <option value="">EUR</option>
@@ -773,8 +773,8 @@ if (!isset($flag_disable_header) || !$flag_disable_header) {
 
 </div>
 <?php
-  //   $nmx_disk_cache->cacheEnd();
-  // }
+    $nmx_disk_cache->cacheEnd();
+  }
   ?>
 
 

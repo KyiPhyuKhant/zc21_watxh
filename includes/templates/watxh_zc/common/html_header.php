@@ -1,5 +1,5 @@
 <?php
-// if ($nmx_disk_cache->cacheStart('html_header', array($_SESSION['customer_id']), true, true)) {
+if ($nmx_disk_cache->cacheStart('html_header', array($_SESSION['customer_id'] ?? null), true, true)) {
 ?>
 <?php
     /**
@@ -72,13 +72,23 @@
                         echo '<link rel="stylesheet" type="text/css" href="min/?f=' . $file['src'] . '&amp;' . $RI_CJLoader->get('minify_time') . '" />' . "\n";
                     }
                 }
+
+            foreach($RC_loader_files['jscript'] as $file)
+                if($file['include']) {
+                include($file['src']);
+                } else if(!$RI_CJLoader->get('minify_js') || (isset($file['external']) && $file['external'])) {
+                echo '<script type="text/javascript" src="'.$file['src'].'"'.($file['defer'] ? ' defer async': '').'></script>'."\n";
+
+                } else {
+                echo '<script type="text/javascript" src="min/?f='.$file['src'].'&'.$RI_CJLoader->get('minify_time').'"'.($file['defer'] ? ' defer async': '').'></script>'."\n";
+                }
         }
         //DEBUG: echo '<!-- I SEE cat: ' . $current_category_id . ' || vs cpath: ' . $cPath . ' || page: ' . $current_page . ' || template: ' . $current_template . ' || main = ' . ($this_is_home_page ? 'YES' : 'NO') . ' -->';
         ?>
 </head>
 <?php
-//     $nmx_disk_cache->cacheEnd();common/tpl_main_page.php 
-// }
+    $nmx_disk_cache->cacheEnd();
+}
 ?>
 <?php // NOTE: Blank line following is intended: 
 ?>

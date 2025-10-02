@@ -28,7 +28,7 @@ $enquiry = '';
 		<?php echo zen_draw_form('contact_us', zen_href_link(FILENAME_CONTACT_US, 'action=send', (isset($request_type) && $request_type === 'SSL' ? 'SSL' : 'NONSSL'))); ?>
 		<div class="contact-us-popup-content-wrapper">
 			<?php echo zen_draw_input_field('contactname', $name, ' size="40" id="contactname-2" placeholder="'. HEADING_CONTACT_US_FULL_NAME .'"'); ?>
-			<?php echo zen_draw_input_field('email', ($email_address), ' size="40" id="email-address-2" placeholder="'. HEADING_CONTACT_US_EMAIL .'"'); ?>
+			<?php echo zen_draw_input_field('email', ($email_address), ' size="40" id="email-address-2" placeholder="'. HEADING_CONTACT_US_EMAIL .'" autocomplete="off"'); ?>
 			<?php echo zen_draw_textarea_field('enquiry', '30', '7', $enquiry, 'id="enquiry-2" placeholder="'. HEADING_CONTACT_US_MESSAGE .'"'); ?>
 		</div>
 		<?php echo zen_draw_input_field('should_be_empty', '', ' size="40" id="CUAS-2" style="visibility:hidden; display:none;" autocomplete="off"'); ?>

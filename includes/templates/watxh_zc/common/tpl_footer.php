@@ -1,5 +1,5 @@
 <?php
-// if ($nmx_disk_cache->cacheStart('tpl_footer', array(), true, true)) {
+if ($nmx_disk_cache->cacheStart('tpl_footer', array(), true, true)) {
 
 ?>
 <?php
@@ -298,7 +298,7 @@ if (
   } // flag_disable_footer
   ?>
 <?php
-//   $nmx_disk_cache->cacheEnd();
-// }
+  $nmx_disk_cache->cacheEnd();
+}
 
 ?>
