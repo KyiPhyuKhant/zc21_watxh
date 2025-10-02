@@ -1,4 +1,5 @@
 <?php
+if (!isset($_SERVER['HTTPS'])) {$_SERVER['HTTPS'] = '';}
 if ($nmx_disk_cache->cacheStart('html_header', array($_SESSION['customer_id'] ?? null), true, true)) {
 ?>
 <?php

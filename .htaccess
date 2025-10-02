@@ -1,4 +1,0 @@
-<IfModule mod_env.c>
-  # Force the HTTPS flag so PHP sees it
-  SetEnv HTTPS off
-</IfModule>
