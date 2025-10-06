@@ -648,7 +648,7 @@ if (!isset($flag_disable_header) || !$flag_disable_header) {
             <p>Special instructions for the seller</p>
             <img src="<?php echo DIR_WS_TEMPLATE . 'images/watxh-icons/chevron-right-icon.svg' ?>" alt="" />
           </div>
-          <button>View Cart</button>
+          <button><a href="<?php echo zen_href_link(FILENAME_SHOPPING_CART); ?>" class="cart-view-button">View Cart</a></button>
         </div>
 
         </form>

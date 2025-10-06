@@ -2382,6 +2382,9 @@ a.tag-close-btn img {
 .cart-form button {
   width: 100%;
 }
+.cart-form button a {
+    color: #fff;
+}
 .cart-total {
   display: flex;
   align-items: center;

@@ -1,5 +1,5 @@
 <?php
-$define =[
+$define = [
 	'TEXT_BUTTON_SAVE_CHANGES' => 'Save Changes',
 	'TEXT_BUTTON_CANCEL' => 'Cancel',
 	'BOX_CONFIGURATION_DEFAULT' => 'Default Configuration Template'

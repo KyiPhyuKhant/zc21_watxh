@@ -8,19 +8,19 @@
       status:true, 
       xfbml:true 
     });
-    FB.getLoginStatus(handleSessionResponse);
+	FB.getLoginStatus(function(response) {
+	  if (response.status === 'connected') {
+		// the user is logged in and has authenticated your
+		// app, and response.authResponse supplies
+		// the user's ID, a valid access token, a signed
+		// request, and the time the access token 
+		// and signed request each expire
+		var uid = response.authResponse.userID;
+		var accessToken = response.authResponse.accessToken;
+        //if we do have a non-null response.session, call FB.logout(),
+        //the JS method will log the user out of Facebook and remove any authorization cookies
+        FB.logout(response.authResponse);
+	  }
+	});
   }
-//handle a session response from any of the auth related calls
-function handleSessionResponse(response) {
-
-    //if we dont have a session (which means the user has been logged out, redirect the user)
-    if (!response.authResponse) {
-        return;
-    }
-
-    //if we do have a non-null response.session, call FB.logout(),
-    //the JS method will log the user out of Facebook and remove any authorization cookies
-    FB.logout(response.authResponse);
-}
-
 //--></script>

@@ -26,6 +26,23 @@
  */
 
 (function($) {
+    var browserInfo = (function() {
+        var ua = window.navigator.userAgent;
+        var msie = /MSIE|Trident/i.test(ua);
+        var version = NaN;
+        if (msie) {
+            var match = ua.match(/(?:MSIE |rv:)(\d+(?:\.\d+)?)/i);
+            if (match) {
+                version = parseFloat(match[1]);
+            }
+        }
+
+        return {
+            mozilla: /firefox|mozilla/i.test(ua) && !/(compatible|webkit)/i.test(ua),
+            msie: msie,
+            version: version
+        };
+    })();
     var locationWrapper = {
         put: function(hash, win) {
             (win || window).location.hash = this.encoder(hash);
@@ -33,7 +50,7 @@
         get: function(win) {
             var hash = ((win || window).location.hash).replace(/^#/, '');
             try {
-                return $.browser.mozilla ? hash : decodeURIComponent(hash);
+                return browserInfo.mozilla ? hash : decodeURIComponent(hash);
             }
             catch (error) {
                 return hash;
@@ -169,7 +186,7 @@
     implementations.hashchangeEvent = {
         _init: function() {
             self.callback(locationWrapper.get());
-            $(window).bind('hashchange', self.check);
+            $(window).on('hashchange', self.check);
         },
         check: function() {
             self.callback(locationWrapper.get());
@@ -181,7 +198,7 @@
 
     var self = $.extend({}, implementations.base);
 
-    if($.browser.msie && ($.browser.version < 8 || document.documentMode < 8)) {
+    if(browserInfo.msie && (browserInfo.version < 8 || document.documentMode < 8)) {
         self.type = 'iframeTimer';
     } else if("onhashchange" in window) {
         self.type = 'hashchangeEvent';

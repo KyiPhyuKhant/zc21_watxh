@@ -351,7 +351,7 @@ function zen_get_attributes_valid($product_id, $option, $value)
         $check_attributes = zen_get_attribute_details((int)$product_id, (int)$lookup, 0);
 
         // TEXT attribute cannot be blank
-        if ($check_attributes->fields['attributes_required'] === '1' && (empty($value) && !is_numeric($value))) {
+        if (!$check_attributes->EOF && isset($check_attributes->fields['attributes_required']) && $check_attributes->fields['attributes_required'] === '1' && (empty($value) && !is_numeric($value))) {
             $check_valid = false;
         }
     }
