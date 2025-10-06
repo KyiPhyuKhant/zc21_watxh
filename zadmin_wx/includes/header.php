@@ -68,7 +68,7 @@ if (empty($action)) {
 if (!isset($zen_admin_html_head_loaded) && !isset($_SESSION['pages_needing_update'][$current_page])) {
     $_SESSION['pages_needing_update'][$current_page] = true;
     $messageStack->add(WARNING_PAGE_REQUIRES_UPDATE, 'warning');
-    trigger_error(WARNING_PAGE_REQUIRES_UPDATE, E_USER_DEPRECATED);
+    // trigger_error(WARNING_PAGE_REQUIRES_UPDATE, E_USER_DEPRECATED);
 }
 
 // display alerts/error messages, if any
