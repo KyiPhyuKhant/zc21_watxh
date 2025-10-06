@@ -179,7 +179,7 @@ if ($gID == 7) {
                         }
 
                         $contents = array('form' => zen_draw_form('configuration', 'configuration_default.php', 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id . '&action=save'));
-                        if (ADMIN_CONFIGURATION_KEY_ON == 1) {
+                        if (defined('ADMIN_CONFIGURATION_KEY_ON') && ADMIN_CONFIGURATION_KEY_ON == 1) {
                           $contents[] = array('text' => '<strong>Key: ' . $cInfo->configuration_key . '</strong><br />');
                         }
                         $contents[] = array('text' => TEXT_INFO_EDIT_INTRO);
@@ -189,7 +189,7 @@ if ($gID == 7) {
                       default:
                         if (isset($cInfo) && is_object($cInfo)) {
                           $heading[] = array('text' => '<b>' . $cInfo->configuration_title . '</b>');
-                          if (ADMIN_CONFIGURATION_KEY_ON == 1) {
+                          if (defined('ADMIN_CONFIGURATION_KEY_ON') && ADMIN_CONFIGURATION_KEY_ON == 1) {
                             $contents[] = array('text' => '<strong>Key: ' . $cInfo->configuration_key . '</strong><br />');
                           }
 
