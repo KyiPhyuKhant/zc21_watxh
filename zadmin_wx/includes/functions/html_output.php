@@ -142,17 +142,17 @@ function zen_catalog_base_link($connection = '')
 
     $styles = '';
 
-    if ($width !== '' && !str_contains($params, 'width:')) {
+    if ($width !== '' && !str_contains($params ?? '', 'width:')) {
         $width = trim($width);
         $styles .= 'width:' . $width . (!str_ends_with($width, '%') ? 'px' : '') . '; ';
     }
 
-    if ($height !== '' && !str_contains($params, 'height:')) {
+    if ($height !== '' && !str_contains($params ?? '', 'height:')) {
         $height = trim($height);
         $styles .= 'height:' . $height . (!str_ends_with($height, '%') ? 'px' : '') . '; ';
     }
 
-    if (str_contains($params, 'style=')) {
+    if (str_contains($params ?? '', 'style=')) {
         $params = str_replace('style="', 'style="' . $styles, $params);
     } else {
         $params .= ' style="' . $styles . '"';

@@ -65,6 +65,10 @@ $order = new order;
 require(DIR_WS_CLASSES . 'shipping.php');
 $shipping_modules = new shipping();
 
+// Initialize variables to prevent undefined warnings
+$free_shipping = false;
+$credit_covers = false;
+
 // process modules
 $oprc_process_dir_full = DIR_FS_CATALOG . DIR_WS_MODULES . 'one_page_checkout_process/';
 $oprc_process_dir = DIR_WS_MODULES . 'one_page_checkout_process/';
@@ -142,14 +146,14 @@ $order_totals = $order_total_modules->process();
 require(DIR_WS_CLASSES . 'payment.php');
 // BEGIN REWARDS POINTS
 // if credit does not cover order total or isn't selected
-if ($_SESSION['credit_covers'] != true) {
+if (!isset($_SESSION['credit_covers']) || $_SESSION['credit_covers'] != true) {
 // check that a gift   voucher isn't being used that is larger than the order
-  if ($_SESSION['cot_gv'] < $order->info['total']) {
+  if (isset($_SESSION['cot_gv']) && $_SESSION['cot_gv'] < $order->info['total']) {
     $credit_covers =   false;
   }
 }
 // END REWARDS POINTS
-if ($credit_covers || $_SESSION['credit_covers'] || $order->info['total'] == 0) {
+if ($credit_covers || (isset($_SESSION['credit_covers']) && $_SESSION['credit_covers']) || $order->info['total'] == 0) {
   $credit_covers = true;
   unset($_SESSION['payment']);
   $_SESSION['payment'] = '';
@@ -158,7 +162,11 @@ if ($credit_covers || $_SESSION['credit_covers'] || $order->info['total'] == 0) 
 //@debug echo ($credit_covers == true) ? 'TRUE' : 'FALSE';
 
 //BOF saved credit card modifications
-list($saved_cc_module, $saved_credit_card_id) = explode('_', $_SESSION['payment']);
+$saved_cc_module = '';
+$saved_credit_card_id = '';
+if (isset($_SESSION['payment']) && strpos($_SESSION['payment'], '_') !== false) {
+  list($saved_cc_module, $saved_credit_card_id) = explode('_', $_SESSION['payment'], 2);
+}
 if($saved_cc_module == 'savedcard' && is_numeric($saved_credit_card_id)) {
   $_SESSION['payment'] = 'paypalsavedcard';
   $_SESSION['saved_card_id'] = $saved_credit_card_id;
@@ -254,7 +262,7 @@ if (STOCK_CHECK == 'true') {
 }
 
 // update customers_referral with $_SESSION['gv_id']
-if ($_SESSION['cc_id']) {
+if (isset($_SESSION['cc_id']) && $_SESSION['cc_id']) {
   $discount_coupon_query = "SELECT coupon_code
                             FROM " . TABLE_COUPONS . "
                             WHERE coupon_id = :couponID";
