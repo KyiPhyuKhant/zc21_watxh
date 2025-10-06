@@ -1,30 +1,34 @@
 <?php
 /**
  * @package languageDefines
- * @copyright Copyright 2003-2023 Zen Cart Development Team
+ * @copyright Copyright 2003-2006 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
- * @license https://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: lang.change_shipping_billing_address.php for Zen Cart 2.10 (Updated from COWOA version) $
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: J_Schilz for Integrated COWOA - 14 April 2007
  */
 
-return [
-    'BUTTON_DELETE_ALT' => 'Delete',
-    'ENTRY_ADDRESS_TITLE' => 'Address Title',
-    'ACCOUNT_TELEPHONE' => 'true',
-    'ENTRY_TELEPHONE' => 'Telephone',
+// this is used to display the text link in the "information" or other sidebox
+// change address
+$define = [
+    'TEXT_ADDRESS_NEW' => 'Add to address book?',
+    'TEXT_ADDRESS_BOOK_FULL' => '<p><strong>Your address book is full</strong>.</p><p>You may add up to ' . MAX_ADDRESS_BOOK_ENTRIES . ' entries to your address book.  <a href="' . zen_href_link(FILENAME_ADDRESS_BOOK, '', 'NONSSL') . '">Visit the account page to modify your existing entries</a>.</p>',
+    'TITLE_PLEASE_SELECT' => 'Add New Address',
+    'ENTRY_ADDRESS_TITLE' => 'Address Label (i.e. work):',
+    'ENTRY_TELEPHONE' => 'Phone:',
     'ENTRY_TELEPHONE_TEXT' => '*',
-    'ENTRY_COMPANY' => 'Company',
-    'ENTRY_COMPANY_TEXT' => '*',
-    'ENTRY_FIRST_NAME' => 'First Name',
-    'ENTRY_FIRST_NAME_TEXT' => '*',
-    'ENTRY_LAST_NAME' => 'Last Name',
-    'ENTRY_LAST_NAME_TEXT' => '*',
-    'ENTRY_STREET_ADDRESS' => 'Street Address',
-    'ENTRY_STREET_ADDRESS_TEXT' => '*',
-    'ENTRY_SUBURB' => 'Suburb',
-    'FEC_CSS_BUTTONS' => 'true',
-    'TABLE_HEADING_SHIPPING_METHOD' => 'Shipping Method',
-    'TABLE_HEADING_COMMENTS' => 'Special Instructions or Comments About Your Order',
-    'TABLE_HEADING_PAYMENT_METHOD' => 'Payment Method',
-    'ADDRESS_BOOK_BUTTON_DELETE' => 'Delete',
+    'ENTRY_POST_CODE' => 'Post/zip code:',
+    'ENTRY_POST_CODE_ERROR' => 'Please enter a valid post/zip code, it must be a minimum of ' . ENTRY_POSTCODE_MIN_LENGTH . ' characters.',
+    'ERROR_DELETE_SELECTED_ADDRESS' => 'Sorry, you cannot remove your currently selected address used for billing or shipping.',
+    'ERROR_DELETE_PRIMARY_ADDRESS' => 'Sorry, you cannot remove your current primary address.',
+    'SUCCESS_DELETE_SELECTED_ADDRESS' => 'Address deleted.'
 ];
+
+$define ['ERROR_DELETE_DEFAULT_ADDRESS'] = $define['ERROR_DELETE_PRIMARY_ADDRESS'];
+
+$zc158 = (PROJECT_VERSION_MAJOR > 1 || (PROJECT_VERSION_MAJOR == 1 && substr(PROJECT_VERSION_MINOR, 0, 3) >= '5.8'));
+if ($zc158) {
+    return $define;
+} else {
+    nmx_create_defines($define);
+}
+// eof

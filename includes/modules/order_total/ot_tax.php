@@ -59,6 +59,7 @@
         public function process()
         {
             global $order, $currencies;
+            if (!isset($_SESSION['customer_id'])) return false; // OPRC
 
             $taxDescription = '';
             $taxValue = 0;

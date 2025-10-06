@@ -11,6 +11,11 @@
 // This should be first line of the script:
 $zco_notifier->notify('NOTIFY_HEADER_START_PASSWORD_FORGOTTEN');
 
+//BOF Reset Password URL
+if(defined('RESET_PASSWORD_URL_TYPE') && RESET_PASSWORD_URL_TYPE == 'Password Reset URL') {
+  define('TEXT_MAIN', PASSWORD_RESET_PAGE_TEXT);
+}
+//EOF Reset Password URL
 
 require(DIR_WS_MODULES . zen_get_module_directory('require_languages.php'));
 
@@ -29,16 +34,19 @@ if (isset($_GET['action']) && ($_GET['action'] == 'process')) {
     $_SESSION['login_attempt'] ++;
   } // END SLAM PREVENTION
 
-  if (empty($_POST['email_address'])) { 
+  if (empty($_POST['email_address'])) {
     $messageStack->add_session('password_forgotten', ENTRY_EMAIL_ADDRESS_ERROR, 'error');
     zen_redirect(zen_href_link(FILENAME_PASSWORD_FORGOTTEN, '', 'SSL'));
   }
 
   $email_address = zen_db_prepare_input(trim($_POST['email_address']));
 
+  // below modified for OPRC Guest Checkout - Always use full account first
+
   $check_customer_query = "SELECT customers_firstname, customers_lastname, customers_password, customers_id
                            FROM " . TABLE_CUSTOMERS . "
-                           WHERE customers_email_address = :emailAddress";
+                           WHERE customers_email_address = :emailAddress
+                           ORDER BY COWOA_account ASC";
 
   $check_customer_query = $db->bindVars($check_customer_query, ':emailAddress', $email_address, 'string');
   $check_customer = $db->Execute($check_customer_query);
@@ -47,9 +55,33 @@ if (isset($_GET['action']) && ($_GET['action'] == 'process')) {
 
   if ($check_customer->RecordCount() > 0) {
 
+  //BOF Reset Password URL
+  if(defined('RESET_PASSWORD_URL_TYPE') && RESET_PASSWORD_URL_TYPE == 'Password Reset URL') {
+    $token = zen_create_random_value(24);
+    $sql = "UPDATE " . TABLE_CUSTOMERS . "
+            SET password_reset_token = :token
+            WHERE customers_id = :customersID";
+
+    $sql = $db->bindVars($sql, ':token', $token, 'string');
+    $sql = $db->bindVars($sql, ':customersID', $check_customer->fields['customers_id'], 'integer');
+    $db->Execute($sql);
+
+    $html_msg['EMAIL_CUSTOMERS_NAME'] = $check_customer->fields['customers_firstname'] . ' ' . $check_customer->fields['customers_lastname'];
+    $html_msg['EMAIL_MESSAGE_HTML'] = sprintf(PASSWORD_RESET_EMAIL_BODY, $token);
+
+    // send the email
+    zen_mail($check_customer->fields['customers_firstname'] . ' ' . $check_customer->fields['customers_lastname'], $email_address, PASSWORD_RESET_EMAIL_SUBJECT, sprintf(PASSWORD_RESET_EMAIL_BODY, $token), STORE_NAME, EMAIL_FROM, $html_msg,'password_forgotten');
+
+  } else {
+  //EOF Reset Password URL
+
     $zco_notifier->notify('NOTIFY_PASSWORD_FORGOTTEN_VALIDATED', $email_address, $sessionMessage);
 
-    $new_password = zen_create_PADSS_password( (ENTRY_PASSWORD_MIN_LENGTH > 0 ? ENTRY_PASSWORD_MIN_LENGTH : 5) );
+    if (PROJECT_VERSION_MAJOR > 1 || (PROJECT_VERSION_MAJOR == 1 && substr(PROJECT_VERSION_MINOR, 0, 3) >= '5.3')) {
+      $new_password = zen_create_PADSS_password( (ENTRY_PASSWORD_MIN_LENGTH > 0 ? ENTRY_PASSWORD_MIN_LENGTH : 5) );
+	} else {
+      $new_password = zen_create_random_value( (ENTRY_PASSWORD_MIN_LENGTH > 0 ? ENTRY_PASSWORD_MIN_LENGTH : 5) );
+	}
     $crypted_password = zen_encrypt_password($new_password);
 
     $sql = "UPDATE " . TABLE_CUSTOMERS . "
@@ -64,9 +96,13 @@ if (isset($_GET['action']) && ($_GET['action'] == 'process')) {
     $html_msg['EMAIL_MESSAGE_HTML'] = sprintf(EMAIL_PASSWORD_REMINDER_BODY, $new_password);
 
     // send the email
-    // Note: If this mail frequently winds up in spam folders, try replacing 
-    // $html_msg to 'none' in the call below. 
+    // Note: If this mail frequently winds up in spam folders, try replacing
+    // $html_msg to 'none' in the call below.
     zen_mail($check_customer->fields['customers_firstname'] . ' ' . $check_customer->fields['customers_lastname'], $email_address, EMAIL_PASSWORD_REMINDER_SUBJECT, sprintf(EMAIL_PASSWORD_REMINDER_BODY, $new_password), STORE_NAME, EMAIL_FROM, $html_msg,'password_forgotten');
+
+  //BOF Reset Password URL
+  }
+  //EOF Reset Password URL
 
     // handle 3rd-party integrations
     $zco_notifier->notify('NOTIFY_PASSWORD_FORGOTTEN_CHANGED', $email_address, $check_customer->fields['customers_id'], $new_password);

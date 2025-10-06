@@ -1010,6 +1010,7 @@ class order extends base
             'order_weight' => $_SESSION['cart']->weight,
         ];
 
+        if (isset($_SESSION['COWOA']) && $_SESSION['COWOA']) $sql_data_array['COWOA_order'] = 1; // OPRC
         zen_db_perform(TABLE_ORDERS, $sql_data_array);
         $this->orderId = $this->info['order_id'] = $insert_id = $db->insert_ID();
         $this->notify('NOTIFY_ORDER_DURING_CREATE_ADDED_ORDER_HEADER', array_merge(['orders_id' => $this->orderId, 'shipping_weight' => $_SESSION['cart']->weight], $sql_data_array), $this->orderId);
@@ -1365,14 +1366,26 @@ class order extends base
         // make an array to store the html version
         $html_msg = [];
 
+        // OPRC BOF
+        // Guest Checkout
+        if (isset($_SESSION['COWOA']) && $_SESSION['COWOA']) {
+            $invoiceInfo = EMAIL_TEXT_INVOICE_URL . ' ' . zen_href_link(FILENAME_ORDER_STATUS, 'order_id=' . $zf_insert_id . '&query_email_address=' . $this->customer['email_address'] . '&action=process', 'SSL', false) . "\n\n";
+            $htmlInvoiceURL = EMAIL_TEXT_INVOICE_URL_CLICK;
+            $htmlInvoiceValue = zen_href_link(FILENAME_ORDER_STATUS, 'order_id=' . $zf_insert_id . '&query_email_address=' . $this->customer['email_address'] . '&action=process', 'SSL', false);
+        } else {
+            $invoiceInfo = EMAIL_TEXT_INVOICE_URL . ' ' . zen_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $zf_insert_id, 'SSL', false) . "\n\n";
+            $htmlInvoiceURL = EMAIL_TEXT_INVOICE_URL_CLICK;
+            $htmlInvoiceValue = zen_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $zf_insert_id, 'SSL', false);
+        }
         //intro area
         $email_order = EMAIL_TEXT_HEADER . EMAIL_TEXT_FROM . STORE_NAME . "\n\n" .
-            $this->customer['firstname'] . ' ' . $this->customer['lastname'] . "\n\n" .
-            EMAIL_THANKS_FOR_SHOPPING . "\n" . EMAIL_DETAILS_FOLLOW . "\n" .
-            EMAIL_SEPARATOR . "\n" .
-            EMAIL_TEXT_ORDER_NUMBER . ' ' . $zf_insert_id . "\n" .
-            EMAIL_TEXT_DATE_ORDERED . ' ' . $zcDate->output(DATE_FORMAT_LONG) . "\n" .
-            EMAIL_TEXT_INVOICE_URL . ' ' . zen_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $zf_insert_id, 'SSL', false) . "\n\n";
+        $this->customer['firstname'] . ' ' . $this->customer['lastname'] . "\n\n" .
+        EMAIL_THANKS_FOR_SHOPPING . "\n" . EMAIL_DETAILS_FOLLOW . "\n" .
+        EMAIL_SEPARATOR . "\n" .
+        EMAIL_TEXT_ORDER_NUMBER . ' ' . $zf_insert_id . "\n\n" .
+        EMAIL_TEXT_DATE_ORDERED . ' ' . date('m/d/Y') . "\n\n";
+        $email_order .= $invoiceInfo;
+        // OPRC EOF
 
         $html_msg['EMAIL_TEXT_HEADER'] = EMAIL_TEXT_HEADER;
         $html_msg['EMAIL_TEXT_FROM'] = EMAIL_TEXT_FROM;

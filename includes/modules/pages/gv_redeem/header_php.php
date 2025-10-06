@@ -13,6 +13,9 @@
  * @var notifier $zco_notifier
  */
 
+// added to stop guest accounts from accessing this page
+$zco_notifier->notify('NOTIFY_HEADER_REGISTERED_USERS_ONLY'); // OPRC
+
 $zco_notifier->notify('NOTIFY_HEADER_START_GV_REDEEM');
 
 require(DIR_WS_MODULES . zen_get_module_directory('require_languages.php'));
@@ -83,5 +86,10 @@ if (!$error) {
   zen_gv_account_update($_SESSION['customer_id'], $_SESSION['gv_id']);
   $_SESSION['gv_id'] = '';
 }
+
+$temp = $current_page_base;
+$current_page_base = 'lang.' . $current_page_base;
+require(DIR_WS_MODULES . zen_get_module_directory('require_languages.php'));
+$current_page_base = $temp;
 
 $breadcrumb->add(NAVBAR_TITLE);

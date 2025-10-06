@@ -149,12 +149,22 @@ if (isset($_POST['action']) && ($_POST['action'] === 'process') && !isset($login
         $messageStack->add('create_account', ENTRY_EMAIL_ADDRESS_CHECK_ERROR);
     } else {
 
-        $already_exists = !zen_check_email_address_not_already_used($email_address);
-        $zco_notifier->notify('NOTIFY_CREATE_ACCOUNT_LOOKUP_BY_EMAIL', $email_address, $already_exists, $send_welcome_email);
-
-        if ($already_exists) {
-            $error = true;
-            $messageStack->add('create_account', ENTRY_EMAIL_ADDRESS_ERROR_EXISTS);
+        // OPRC - modified by Numinix for guest checkout support
+        $check_email_query = "SELECT COWOA_account
+                        FROM " . TABLE_CUSTOMERS . "
+                        WHERE customers_email_address = '" . zen_db_input($email_address) . "' LIMIT 1;";
+        $zco_notifier->notify('NOTIFY_CREATE_ACCOUNT_LOOKUP_BY_EMAIL', $email_address, $check_email_query, $send_welcome_email);
+        $check_email = $db->Execute($check_email_query);
+        if ($check_email->RecordCount() > 0) {
+            if ($check_email->fields['COWOA_account'] == 1) {
+                $error = true;
+                $messageStack->add_session('header', ENTRY_EMAIL_ADDRESS_ERROR_GUEST);
+                zen_redirect(zen_href_link(FILENAME_PASSWORD_FORGOTTEN, '', 'SSL'));
+            } else {
+                $error = true;
+                $messageStack->add_session('login', ENTRY_EMAIL_ADDRESS_ERROR_EXISTS);
+                zen_redirect(zen_href_link(FILENAME_LOGIN, '', 'SSL'));
+            }
         } else {
             $nick_error = false;
             $zco_notifier->notify('NOTIFY_NICK_CHECK_FOR_EXISTING_EMAIL', $email_address, $nick_error, $nick);
@@ -162,6 +172,7 @@ if (isset($_POST['action']) && ($_POST['action'] === 'process') && !isset($login
                 $error = true;
             }
         }
+        // OPRC EOF
     }
 
     $nick_length_min = ENTRY_NICK_MIN_LENGTH;
