@@ -137,7 +137,6 @@ class ot_gv {
    */
   function process() {
     global $order, $currencies;
-    if(isset($_SESSION['cowoa']) && $_SESSION['cowoa'] == 'true' && OPRC_NOACCOUNT_DISABLE_GV == 'true') return false; // modified for OPRC
     if ($_SESSION['cot_gv']) {
       $od_amount = $this->calculate_deductions($this->get_order_total());
       $this->deduction = $od_amount['total'];
@@ -155,14 +154,7 @@ class ot_gv {
         $order->info['tax'] = $order->info['tax'] - $od_amount['tax'];
         // prepare order-total output for display and storing to invoice
         $this->output[] = array('title' => $this->title . ':',
-                                // modified for OPRC
-                                'text' => '-' . $currencies->format($od_amount['total']) . (
-                                    (defined('FILENAME_QUICK_CHECKOUT') && $_GET['main_page'] == FILENAME_QUICK_CHECKOUT) ||
-                                    (defined('FILENAME_ONE_PAGE_CHECKOUT') && $_GET['main_page'] == FILENAME_ONE_PAGE_CHECKOUT)
-                                    ? '<br /><a href="#" class="gvRemove"><span class="smallText">remove</span></a>'
-                                    : ''
-                                ),
-                                // modified for OPRC
+                                'text' => '-' . $currencies->format($od_amount['total']),
                                 'value' => $od_amount['total']);
       }
     }
@@ -276,7 +268,6 @@ class ot_gv {
     function credit_selection()
     {
         global $db, $order;
-        if(isset($_SESSION['cowoa']) && $_SESSION['cowoa'] == 'true' && OPRC_NOACCOUNT_DISABLE_GV == 'true') return false; // modified for OPRC
 
         // -----
         // Don't offer a GV payment for orders that contain **only** GV's!
@@ -348,13 +339,6 @@ class ot_gv {
     }
     if (isset($_POST['cot_gv']) && $_POST['cot_gv'] == 0) $_SESSION['cot_gv'] = '0.00';
 
-    // modified for OPRC
-    // get customer's balance
-    $balance = $this->user_has_gv_account($_SESSION['customer_id']);
-    if ($_SESSION['cot_gv'] > $balance) {
-      $_SESSION['cot_gv'] = $balance;
-    }
-    // modified for OPRC
     // if we have a GV redemption code submitted, process it
     if (!empty($_POST['gv_redeem_code'])) {
       // check for validity
@@ -467,11 +451,6 @@ class ot_gv {
    */
   function user_has_gv_account($c_id) {
     global $db;
-    // modified for OPRC
-    if(isset($_SESSION['cowoa']) && $_SESSION['cowoa'] == 'true' && OPRC_NOACCOUNT_DISABLE_GV == 'true') {
-      return 0; //customer cannot access account GV balance when using guest checkout
-    }
-    // modified for OPRC
     $gv_result = $db->ExecuteNoCache("SELECT amount FROM " . TABLE_COUPON_GV_CUSTOMER . " WHERE customer_id = '" . (int)$c_id . "'");
     if ($gv_result->RecordCount() > 0) {
       return $gv_result->fields['amount'];

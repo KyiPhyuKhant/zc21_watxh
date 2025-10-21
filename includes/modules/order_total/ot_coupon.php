@@ -171,17 +171,11 @@ class ot_coupon extends base
 
             if ($order->info['total'] < 0) $order->info['total'] = 0;
 
-            // OPRC BOF
             $this->output[] = [
-                'title' => $this->title . ' (' . $this->coupon_code . '):',
-                'text' => '-' . $currencies->format($od_amount['total']) . (
-                    (defined('FILENAME_QUICK_CHECKOUT') && $_GET['main_page'] == FILENAME_QUICK_CHECKOUT) ||
-                    (defined('FILENAME_ONE_PAGE_CHECKOUT') && $_GET['main_page'] == FILENAME_ONE_PAGE_CHECKOUT)
-                    ? '<br /><a href="#" class="couponRemove"><span class="smallText">remove</span></a>' 
-                    : ''),
+                'title' => $this->title . ': ' . $this->coupon_code . ' :',
+                'text' => '-' . $currencies->format($od_amount['total']),
                 'value' => $od_amount['total']
             ];
-            // OPRC EOF
         }
     }
 

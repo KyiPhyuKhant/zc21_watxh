@@ -197,7 +197,7 @@ class payment
         }
 
         $js = '<script>' . "\n" .
-            'function check_payment_form() {' . "\n" . // OPRC
+            'function check_form() {' . "\n" .
             '  var error = 0;' . "\n" .
             '  var error_message = "' . JS_ERROR . '";' . "\n" .
             '  var payment_value = null;' . "\n" .
@@ -222,45 +222,21 @@ class payment
             }
         }
 
-        // OPRC BOF
-        $js .= "\n" . '  if (payment_value == null && submitter != 1) {' . "\n" .
-        '    error_message = error_message + "' . strip_tags(JS_ERROR_NO_PAYMENT_MODULE_SELECTED) . '";' . "\n" .
-        '    error = 1;' . "\n" .
-        '  }' . "\n\n" .
-        '  if (error == 1 && submitter != 1) {' . "\n" .
-        '    if (error_message.length > 0 && error_message != "' . strip_tags(JS_ERROR) . '") {' . "\n" . 
-        '      alert(error_message);' . "\n" .
-        '    }' . "\n" .
-        '    var payment_methods = document.getElementsByClassName("payment-method");' . "\n" .
-        '    for(i=0; i < payment_methods.length; i++){' . "\n" .
-        '    if(payment_methods[i].querySelector("input").value == payment_value){' . "\n" .
-        '     var payment_method = payment_methods[i].querySelectorAll("input");' . "\n" .
-        '     for(j=0; j < payment_method.length; j++){' . "\n" .
-        '       if(payment_method[j].value == ""){ ' . "\n" .
-        '       if(payment_method[j].name != "card_nick_name"){ ' . "\n" .
-        '         payment_method[j].className += "missing "' . "\n" .
-        '         }' . "\n" .
-        '         }' . "\n" .
-            '   else {' . "\n" .
-                    '    payment_method[j].classList.remove("missing")     ' . "\n" .
-                    '         }' . "\n" .
-        '       }' . "\n" .
-        '     }' . "\n" .
-        '    }' . "\n" .
-        '    var missing = document.getElementsByClassName("missing");' . "\n" .
-        '    if (missing.length > 0) {' . "\n" .
-        '    // scroll to top error message' . "\n" .
-        '    missing[0].scrollIntoView({behaviour: "smooth"});' . "\n" .
-        '    }' . "\n" .
-        '    return false;' . "\n" .
-        '  } else {' . "\n" .
-        (($this->doesCollectsCardDataOnsite == true && PADSS_AJAX_CHECKOUT == '1' && !in_array($_GET['main_page'], array(FILENAME_QUICK_CHECKOUT, FILENAME_CHECKOUT, FILENAME_ONE_PAGE_CHECKOUT))) ? 
-        '    return collectsCardDataOnsite(payment_value);' . "\n" : '') . 
-        '    return true;' . "\n" .
-        '  }' . "\n" .
-        '}' . "\n" .
-        '//--></script>' . "\n";
-        // OPRC EOF
+        $js .=  "\n" . '  if (payment_value == null && submitter != 1) {' . "\n";
+        $js .=  '    error_message = error_message + "' . JS_ERROR_NO_PAYMENT_MODULE_SELECTED . '";' . "\n";
+        $js .=  '    error = 1;' . "\n";
+        $js .=  '  }' . "\n\n";
+        $js .=  '  if (error == 1 && submitter != 1) {' . "\n";
+        $js .=  '    alert(error_message);' . "\n";
+        $js .=  '    return false;' . "\n";
+        $js .=  '  } else {' . "\n";
+        $js .=  ' var result = true; '  . "\n";
+        if ($this->doesCollectsCardDataOnsite === true && PADSS_AJAX_CHECKOUT === '1') {
+            $js .= '      result = !(doesCollectsCardDataOnsite(payment_value));' . "\n";
+        }
+        $js .=  ' if (result == false) doCollectsCardDataOnsite();' . "\n";
+        $js .=  '    return result;' . "\n";
+        $js .=  '  }' . "\n" . '}' . "\n" . '</script>' . "\n";
 
         return $js;
     }
