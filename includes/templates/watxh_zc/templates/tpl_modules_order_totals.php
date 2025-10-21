@@ -16,8 +16,8 @@
   for ($i=0; $i< $size; $i++) { 
 ?>
 <tr id="<?php echo str_replace('_', '', $GLOBALS[$class]->code); ?>" class="otModule">
-  <td class="lineTitle larger" align="right"><?php echo $GLOBALS[$class]->output[$i]['title']; ?></td>
-  <td class="totalBox larger" align="right"><?php echo $GLOBALS[$class]->output[$i]['text']; ?></td>
+  <td class="lineTitle larger"><?php echo $GLOBALS[$class]->output[$i]['title']; ?></td>
+  <td class="totalBox larger"><?php echo $GLOBALS[$class]->output[$i]['text']; ?></td>
 </tr>
 <?php 
   } 

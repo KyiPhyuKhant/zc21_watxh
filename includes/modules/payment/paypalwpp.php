@@ -306,17 +306,8 @@ class paypalwpp extends base {
     /**
      * since we are NOT processing via the gateway, we will only display MarkFlow payment option, and no CC fields
      */
-    // OPRC - bof modified by Numinix for paypal button
-    if(OPRC_DISPLAY_PAYPAL_BUTTON_ON_CHECKOUT == 'true') {
-      return array('id' => $this->code,
-                  'module' => '<span id="customPPECbutton"><img src="' . MODULE_PAYMENT_PAYPALWPP_EC_BUTTON_IMG . '" alt="' . MODULE_PAYMENT_PAYPALWPP_TEXT_BUTTON_ALTTEXT . '" id="ecButton"></span>', 
-                  'noradio' => true);
-    } else {
-      global $template, $current_page_base;
-      return array('id' => $this->code,
-                  'module' => '<span>' . zen_image(zen_output_string($template->get_template_dir("payment_selections.jpg", DIR_WS_TEMPLATE, $current_page_base, 'images/one_page_checkout/') . "payment_selections.jpg"), MODULE_PAYMENT_PAYPALWPP_TEXT_BUTTON_ALTTEXT, 200) . '</span>');
-    }
-    // OPRC - eof modified by Numinix for paypal button
+    return array('id' => $this->code,
+                 'module' => '<img src="' . MODULE_PAYMENT_PAYPALEC_MARK_BUTTON_IMG . '" alt="' . MODULE_PAYMENT_PAYPALWPP_TEXT_BUTTON_ALTTEXT . '"><span style="font-size:11px; font-family: Arial, Verdana;"> ' . MODULE_PAYMENT_PAYPALWPP_MARK_BUTTON_TXT . '</span>');
   }
   function pre_confirmation_check() {
     // Since this is an EC checkout, do nothing.

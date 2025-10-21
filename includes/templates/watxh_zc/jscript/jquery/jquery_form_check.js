@@ -30,7 +30,7 @@ function check_radio(field_name, message) {
 
     if (isChecked == false) {
       jQuery('[name=' + field_name + ']').addClass("missing");
-      jQuery('[name=' + field_name + ']').next().after(' <span class="alert validation">' + message + '</span>');
+      jQuery('[name=' + field_name + ']').after(' <span class="alert validation">' + message + '</span>');
       error = true;
     }
   }

@@ -1,7 +1,7 @@
 /**
  * @name jQuery Stick 'em
  * @author Trevor Davis
- * @version 1.4
+ * @version 1.3
  *
  *	$('.container').stickem({
  *	 	item: '.stickem',
@@ -55,9 +55,11 @@
 		bindEvents: function() {
 			var _self = this;
 
+			if(_self.items.length > 0) {
 				_self.$win.on('scroll.stickem', $.proxy(_self.handleScroll, _self));
 
 				_self.$win.on('resize.stickem', $.proxy(_self.handleResize, _self));
+			}
 		},
 
 		destroy: function() {
@@ -101,10 +103,6 @@
 				}
 			} else {
 				item.$elem.removeClass(_self.config.stickClass + ' ' + _self.config.endStickClass);
-
-				// customization for keeping shopping at the right side
-				jQuery(".stickem").css('margin-left', "0");
-				// end customization
 			}
 		},
 
@@ -125,7 +123,6 @@
 
 		handleScroll: function() {
 			var _self = this;
-			if(_self.items.length > 0) {
 			var pos = _self.$win.scrollTop();
 
 			for(var i = 0, len = _self.items.length; i < len; i++) {
@@ -134,10 +131,6 @@
 				//If it's stuck, and we need to unstick it
 				if(item.isStuck && (pos < item.containerStart || pos > item.scrollFinish)) {
 					item.$elem.removeClass(_self.config.stickClass);
-
-					// customization for keeping shopping at the right side
-					jQuery(".stickem").css('margin-left', "0");
-					// end customization
 
 					//only at the bottom
 					if(pos > item.scrollFinish) {
@@ -154,19 +147,15 @@
 				//If we need to stick it
 				} else if(item.isStuck === false && pos > item.containerStart && pos < item.scrollFinish) {
 						item.$elem.removeClass(_self.config.endStickClass).addClass(_self.config.stickClass);
+            // add the left positioning
+            //$(_self.config.stickClass).css('left', item.$elem.outerWidth(true) + item.$elem.offset().left);             
 						item.isStuck = true;
-						
-						// customization for keeping shopping at the right side
-						var stickemLeft = jQuery('#oprcLeft').outerWidth(true);
-      					jQuery("." + _self.config.stickClass).css('margin-left', stickemLeft);
-      					// end customization
 
 						//if supplied fire the onStick callback
 						if(_self.config.onStick) {
 							_self.config.onStick(item);
 						}
 				}
-			}
 			}
 		},
 
