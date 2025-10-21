@@ -7,6 +7,7 @@ $define = [
     'NO_COMMENTS_TEXT' => 'None',
     'TITLE_CONTINUE_CHECKOUT_PROCEDURE' => 'Final Step',
     'TEXT_CONTINUE_CHECKOUT_PROCEDURE' => '- continue to complete your order. Thank you!',
+    'ORDER_COMPLETED_TEXT' => 'Please review your order details below before confirming your purchase.',
 ];
 
 return $define;
