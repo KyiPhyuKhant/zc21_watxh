@@ -1,2 +1,0 @@
-<?php
-// Update license check
