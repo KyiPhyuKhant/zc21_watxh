@@ -77,7 +77,7 @@ if (!function_exists('plugin_version_check_for_updates')) {
 
 // Version Checking
 if ($zencart_com_plugin_id != 0) {
-    if ($_GET['gID'] == $configuration_group_id) {
+    if (isset($_GET['gID']) && $_GET['gID'] == $configuration_group_id) {
         $new_version_details = plugin_version_check_for_updates($zencart_com_plugin_id, $current_version);
         if ($new_version_details != FALSE) {
             $messageStack->add("Version " . $new_version_details['latest_plugin_version'] . " of " . $new_version_details['title'] . ' is available at <a href="' . $new_version_details['link'] . '" target="_blank">[Details]</a>', 'caution');
@@ -86,7 +86,7 @@ if ($zencart_com_plugin_id != 0) {
 }
 
 // Cache clearing via the admin.  Code added here since it will run admin-wide after DB CONSTANTS are defined
-if($_POST['securityToken'] != ''){
+if (isset($_GET['securityToken'])) {
     require_once(DIR_FS_CATALOG . DIR_WS_CLASSES . 'nmx_disk_cache.php');
     $nmx_disk_cache = new nmx_disk_cache();
     $php_file = str_replace(".php","",basename($PHP_SELF));
